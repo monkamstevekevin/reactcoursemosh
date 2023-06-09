@@ -1,0 +1,33 @@
+import { useState } from "react";
+import ExpenseFilter from "./components/ExpensesTracer/components/ExpenseFilter";
+import ExpenseForm from "./components/ExpensesTracer/components/ExpenseForm";
+import ExpenseList from "./components/ExpensesTracer/components/ExpenseList";
+function App() {
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [expenses, setExpenses] = useState([
+    { id: 1, description: "Milk", amount: 45, categorie: "Utilities" },
+    { id: 2, description: "Chesse", amount: 40, categorie: "Utilities" },
+    { id: 3, description: "Biutter", amount: 45, categorie: "Utilities" },
+  ]);
+  const visibleExpenses = selectedCategory
+    ? expenses.filter((e) => e.categorie === selectedCategory)
+    : expenses;
+  if (expenses.length === 0) return null;
+  return (
+    <div>
+      <div className="mb-5">
+        <ExpenseForm onSubmit={expense =>  setExpenses([...expenses,{...expense,id:expenses.length +1,categorie:expense.category}])}></ExpenseForm>
+      </div>
+      <div className="mb-3">
+        <ExpenseFilter
+          onSelectCategory={(category) => setSelectedCategory(category)}
+        ></ExpenseFilter>
+      </div>
+      <ExpenseList
+        expenses={visibleExpenses}
+        onDelete={(id) => setExpenses(expenses.filter((e) => e.id != id))}
+      ></ExpenseList>
+    </div>
+  );
+}
+export default App;

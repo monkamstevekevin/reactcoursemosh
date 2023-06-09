@@ -1,0 +1,51 @@
+import { useEffect, useRef, useState } from "react";
+import ExpenseFilter from "./components/ExpensesTracer/components/ExpenseFilter";
+import ExpenseForm from "./components/ExpensesTracer/components/ExpenseForm";
+import ExpenseList from "./components/ExpensesTracer/components/ExpenseList";
+import ProductList from "./components/ExpensesTracer/components/ProductList";
+import axios from "axios";
+import ListGroup from "./components/ListGroup";
+import Alert2 from "./components/Alert2";
+import Button from "./components/Button/button";
+import Card from "./components/Card";
+import Like from "./components/Like/Like";
+import ExpanText from "./components/ExpanText";
+import Form2 from "./components/Form2";
+import ExpenseList2 from "./components/ExpenseTracker2/ExpenseList2";
+import ExpenseFilter2 from "./components/ExpenseTracker2/ExpenseFilter2";
+import ExpenseForm2 from "./components/ExpenseTracker2/ExpenseForm2";
+interface User {
+  id: number;
+  name: string;
+}
+export const categories = ["Groceries", "Utilities", "Entertainment"] as const;
+function App() {
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [expenses, setExpenses] = useState([
+    { id: 1, description: "aaa", amount: 45, category: "Utilities" },
+    { id: 2, description: "bb", amount: 55, category: "Entertainment" },
+    { id: 3, description: "aaa", amount: 45, category: "Utilities" },
+    { id: 4, description: "aaa", amount: 45, category: "Groceries" },
+  ]);
+  const visibleExpenses = selectedCategory
+    ? expenses.filter((e) => e.category === selectedCategory)
+    : expenses;
+  if (expenses.length === 0) return null;
+  return (
+    <div>
+      <ExpenseForm2
+        onsubmit={(expense) =>
+          setExpenses([...expenses, { ...expense, id: expenses.length + 1 }])
+        }
+      />
+      <ExpenseFilter2
+        onselectCategory={(category) => setSelectedCategory(category)}
+      ></ExpenseFilter2>
+      <ExpenseList2
+        expenses={visibleExpenses}
+        onDelete={(id) => setExpenses(expenses.filter((e) => e.id != id))}
+      />
+    </div>
+  );
+}
+export default App;
